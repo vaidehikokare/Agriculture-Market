@@ -1,0 +1,26 @@
+# Virtual environment
+myenv/
+venv/
+
+# Byte-compiled / cached
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+
+# Database
+db.sqlite3
+
+# Django environment variables
+.env
+
+# Static and media files (optional)
+staticfiles/
+media/
+
+# IDE & Editor Files
+.vscode/
+.idea/
