@@ -13,16 +13,12 @@ __pycache__/
 
 # Database
 db.sqlite3
-myenv/
-myproject/settings.py/
+
+# Django settings file (if you want to keep it private)
+myproject/settings.py
+
+# Crop photos folder
 myproject/crop_photos/
+
 # Django environment variables
 .env
-
-# Static and media files (optional)
-staticfiles/
-media/
-
-# IDE & Editor Files
-.vscode/
-.idea/
