@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seed Form</title>
+  {% load static %}
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+      :root {
+          --primary-color: #28a745;
+          --secondary-color: #333;
+          --light-grey: #f4f4f4;
+          --dark-grey: #666;
+      }
+
+      * {
+          font-family: 'Poppins', sans-serif;
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+
+      body {
+          background-color: var(--light-grey);
+      }
+
+      .header {
+          position: relative;
+          background: #fff;
+          padding: 15px 9%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header .logo img {
+          width: 80px;
+      }
+
+      .navbar a {
+          color: var(--secondary-color);
+          margin: 0 15px;
+          font-size: 16px;
+          font-weight: 500;
+          text-decoration: none;
+          transition: color 0.3s ease-in-out;
+      }
+
+      .navbar a:hover {
+          color: var(--primary-color);
+      }
+
+      .form-container {
+          max-width: 600px;
+          background: white;
+          padding: 30px;
+          border-radius: 8px;
+          margin: 8rem auto;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+          text-align: center;
+          color: var(--secondary-color);
+          font-weight: 600;
+      }
+
+      label {
+          font-weight: 500;
+          margin-top: 15px;
+          display: block;
+      }
+
+      input, select, textarea {
+          width: 100%;
+          padding: 12px;
+          margin-top: 5px;
+          border-radius: 5px;
+          border: 1px solid #ddd;
+          font-size: 16px;
+          transition: 0.3s;
+      }
+
+      input:focus, select:focus, textarea:focus {
+          border-color: var(--primary-color);
+          outline: none;
+          box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+      }
+
+      button {
+          width: 100%;
+          background: var(--primary-color);
+          color: white;
+          padding: 12px;
+          font-size: 18px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: 0.3s;
+          margin-top: 20px;
+      }
+
+      button:hover {
+          background: #218838;
+      }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+      <a href="/" class="logo">
+          <img src="{% static 'logo.png' %}" alt="Logo">
+      </a>
+      <nav class="navbar">
+          <a href="/crop/">Crop</a>
+          <a href="/seeds/">Seed</a>
+          <a href="/PlantingMaterial.html">Planting Material</a>
+          <a href="/fer/">Fertilizers</a>
+          <a href="/Equipment.html">Equipment</a>
+          <a href="/Animal.html">Animal Husbandry</a>
+      </nav>
+  </header>
+
+  <div class="form-container">
+      <h2>Seed Details</h2>
+      <form action="{% url 'insert1' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <label for="seedName">Seed Name</label>
+          <input type="text" id="seedName" name="seedName" placeholder="Enter seed name" required>
+
+          <label for="seedType">Seed Type</label>
+          <select id="seedType" name="seedType" required>
+              <option value="">Select seed type</option>
+              <option value="Fruit Seed">Fruit Seed</option>
+              <option value="Vegetable Seed">Vegetable Seed</option>
+              <option value="Grain Seed">Grain Seed</option>
+              <option value="Others">Others</option>
+          </select>
+
+          <label for="quantity">Quantity (in kg)</label>
+          <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required>
+
+          <label for="price">Price (per kg)</label>
+          <input type="number" id="price" name="price" placeholder="Enter price" required>
+
+          <label for="contactName">Seller's Name</label>
+          <input type="text" id="contactName" name="contactName" placeholder="Enter your name" required>
+
+          <label for="contactEmail">Email</label>
+          <input type="email" id="contactEmail" name="contactEmail" placeholder="Enter your email" required>
+
+          <label for="contactPhone">Phone Number</label>
+          <input type="text" id="contactPhone" name="contactPhone" placeholder="Enter your phone number" required>
+
+          <label for="description">Description (Optional)</label>
+          <textarea id="description" name="description" rows="4" placeholder="Provide additional details about the seed (optional)"></textarea>
+
+          <label for="photo">Upload Seed Photo (Optional)</label>
+          <input type="file" id="photo" name="photo" accept="image/*">
+
+          <label for="state">State</label>
+          <select id="state" name="inputState" required onchange="updateDistricts()">
+              <option value="">Select state</option>
+              <option value="Maharashtra">Maharashtra</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Gujarat">Gujarat</option>
+              <option value="Others">Others</option>
+          </select>
+
+          <label for="district">District</label>
+          <select id="district" name="inputDistrict" required>
+              <option value="">Select district</option>
+          </select>
+          <label for="street_address">Street Address</label>
+          <input type="text" id="street_address" name="streetAddress" placeholder="Enter street address" required>
+  
+          <button type="submit">Submit</button>
+      </form>
+  </div>
+
+  <script>
+      function updateDistricts() {
+          let state = document.getElementById("state").value;
+          let districtDropdown = document.getElementById("district");
+
+          let districts = {
+              "Maharashtra": ["Pune", "Mumbai", "Nagpur", "Nashik", "Aurangabad"],
+              "Karnataka": ["Bengaluru", "Mysuru", "Hubli", "Mangaluru"],
+              "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
+              "Others": ["Other District"]
+          };
+
+          districtDropdown.innerHTML = '<option value="">Select district</option>';
+
+          if (districts[state]) {
+              districts[state].forEach(function(district) {
+                  let option = document.createElement("option");
+                  option.value = district;
+                  option.textContent = district;
+                  districtDropdown.appendChild(option);
+              });
+          }
+      }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4; /* Light background for contrast */
+}
+.search-container {
+    background-color: #bebebe; /* Main green color */ /* Add padding for breathing space */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.search-container form {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 800px; /* Limit the width for large screens */
+}
+
+#logo {
+    height: 50px; /* Slightly larger logo */
+    margin-right: 15px; /* Space between logo and search bar */
+}
+
+#searchInput {
+    flex: 1; /* Make the input take up available space */
+    padding: 12px 20px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease; /* Smooth transition */
+}
+
+#searchInput:focus {
+    border-color: #4CAF50; /* Change border color on focus */
+}
+
+button[type="submit"] {
+    padding: 12.5px 25px;
+    font-size: 16px;
+    border: none;
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+button[type="button"] {
+    margin-left: 10px;
+    padding: 12.5px 25px;
+    font-size: 16px;
+    border: none;
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+button[type="submit"]:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+.nav-container {
+    background-color: #121312; /* Complementary green for nav */
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+}
+
+.nav-container a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.nav-container a:hover {
+    background-color: #050605; /* Darken on hover */
+}
