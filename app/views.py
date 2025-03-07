@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Crop , Seeds
+from .models import Crop , Seeds ,Fer
 from django.urls import reverse
 from django.conf import settings
 # from .forms import CropForm
@@ -90,3 +90,58 @@ def insert1(request):
 
 def seeds(request):
      return render(request, 'seeds.html')
+
+def fer(request):
+      return render(request, 'fer.html')
+
+def insert2(request):
+    if request.method == 'POST':
+        fertilizerName= request.POST.get('fertilizerName')
+        fertilizerType = request.POST.get('fertilizerType')
+        quantity = request.POST.get('quantity')
+        price = request.POST.get('price')
+        contactName = request.POST.get('contactName')
+        contactEmail = request.POST.get('contactEmail')
+        contactPhone = request.POST.get('contactPhone')
+        description = request.POST.get('description')
+        photo = request.FILES.get('photo')  # Handle file uploads
+        inputState = request.POST.get('inputState')
+        inputDistrict = request.POST.get('inputDistrict')
+        streetAddress = request.POST.get('streetAddress')
+
+        # Create a new Crop instance
+        crop_instance = Fer(
+            fertilizerName=fertilizerName,
+            fertilizerType=fertilizerType,
+            quantity=quantity,
+            price=price,
+           contactName=contactName,
+            contactEmail=contactEmail,
+            contactPhone=contactPhone,
+            photo=photo,
+            description=description,
+            inputState=inputState,
+            inputDistrict=inputDistrict,
+            streetAddress=streetAddress
+        )
+        crop_instance.save()
+
+        return redirect('fer')  # Redirect after saving
+
+    return render(request, 'fer.html')
+from django.shortcuts import render
+from .models import Crop
+
+def buy(request):
+     crops = Crop.objects.all()  # Fetch all records from the Crop table
+     return render(request, 'buy.html', {'crops': crops})
+def seeds_buy(request):
+     crops = Seeds.objects.all()  # Fetch all records from the Crop table
+     return render(request, 'Seeds_buy.html', {'crops': crops})
+
+def crop_buy(request):
+     crops = Crop.objects.all()  # Fetch all records from the Crop table
+     return render(request, 'crop_buy.html', {'crops': crops})
+def fer_buy(request):
+     crops = Fer.objects.all()  # Fetch all records from the Crop table
+     return render(request, 'fer_buy.html', {'crops': crops})

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>State and District Selector</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+  <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+        .search-container {
+            background-color: #bebebe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container form {
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        #logo {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #searchInput:focus {
+            border-color: #4CAF50;
+        }
+
+        button[type="submit"] {
+            padding: 12.5px 25px;
+            font-size: 16px;
+            border: none;
+            background-color: #0b0c0b;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .nav-container {
+            background-color: #121312;
+            display: flex;
+            justify-content: center;
+            padding: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container a:hover {
+            background-color: #050605;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            color: #111111;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="number"], input[type="email"], select, textarea, input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #060606;
+        }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <form>
+    <div class="nav-container">
+        <a href="/crop/">Crop</a>
+        <a href="/seeds/">Seed</a>
+        <a href="PlantingMaterial.html">Planting Material</a>
+        <a href="Fertilizers.html">Fertilizers</a>
+        <a href="Equipment.html">Equipment</a>
+        <a href="Animal.html">Animal Husbandry</a>
+    </div>
+
+    <div class="form-container">
+        <h2>Crop</h2>
+        <form action="/submit-crop-details" method="POST" enctype="multipart/form-data">
+            <label for="cropName">Crop Name</label>
+            <input type="text" id="cropName" name="cropName" placeholder="Enter crop name" required>
+
+            <label for="cropType">Crop Type</label>
+            <select id="cropType" name="cropType" required>
+                <option value="">Select crop type</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Grains">Grains</option>
+                <option value="Others">Others</option>
+            </select>
+
+            <label for="quantity">Quantity (in kg)</label>
+            <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required>
+
+            <label for="price">Price (per kg)</label>
+            <input type="number" id="price" name="price" placeholder="Enter price" required>
+
+            <label for="contactName">Seller's Name</label>
+            <input type="text" id="contactName" name="contactName" placeholder="Enter your name" required>
+
+            <label for="contactEmail">Email</label>
+            <input type="email" id="contactEmail" name="contactEmail" placeholder="Enter your email" required>
+
+            <label for="contactPhone">Phone Number</label>
+            <input type="text" id="contactPhone" name="contactPhone" placeholder="Enter your phone number" required>
+
+            <label for="description">Description (Optional)</label>
+            <textarea id="description" name="description" rows="4" placeholder="Provide additional details about the crop (optional)"></textarea>
+
+            <label for="photo">Upload Crop Photo (Optional)</label>
+            <input type="file" id="photo" name="photo" accept="image/*">
+      <label for="inputState">State</label>
+      <select class="form-control" id="inputState" onchange="updateDistricts()">
+        <option value="">Select State</option>
+        <option value="Andhra Pradesh">Andhra Pradesh</option>
+        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+        <option value="Assam">Assam</option>
+        <option value="Maharashtra">Maharashtra</option>
+        <!-- Add other states here -->
+        <option value="West Bengal">West Bengal</option>
+        <option disabled style="background-color:#aaa; color:#fff">UNION Territories</option>
+        <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+        <!-- Add other union territories here -->
+      </select>
+      <label for="inputDistrict">District</label>
+      <select class="form-control" id="inputDistrict">
+        <option value="">-- select one --</option>
+      </select>
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+  <script>
+    var statesDistricts = {
+      "Andhra Pradesh": ["Anantapur","Chittoor","East Godavari","Guntur","Kadapa","Krishna","Kurnool","Prakasam","Nellore","Srikakulam","Visakhapatnam","Vizianagaram","West Godavari"],
+      "Arunachal Pradesh": ["Anjaw","Changlang","Dibang Valley","East Kameng","East Siang","Kra Daadi","Kurung Kumey","Lohit","Longding","Lower Dibang Valley","Lower Subansiri","Namsai","Papum Pare","Siang","Tawang","Tirap","Upper Siang","Upper Subansiri","West Kameng","West Siang","Itanagar"],
+      "Assam": ["Baksa","Barpeta","Biswanath","Bongaigaon","Cachar","Charaideo","Chirang","Darrang","Dhemaji","Dhubri","Dibrugarh","Goalpara","Golaghat","Hailakandi","Hojai","Jorhat","Kamrup Metropolitan","Kamrup (Rural)","Karbi Anglong","Karimganj","Kokrajhar","Lakhimpur","Majuli","Morigaon","Nagaon","Nalbari","Dima Hasao","Sivasagar","Sonitpur","South Salmara Mankachar","Tinsukia","Udalguri","West Karbi Anglong"],
+      "Bihar": ["Araria","Arwal","Aurangabad","Banka","Begusarai","Bhagalpur","Bhojpur","Buxar","Darbhanga","East Champaran","Gaya","Gopalganj","Jamui","Jehanabad","Kaimur","Katihar","Khagaria","Kishanganj","Lakhisarai","Madhepura","Madhubani","Munger","Muzaffarpur","Nalanda","Nawada","Patna","Purnia","Rohtas","Saharsa","Samastipur","Saran","Sheikhpura","Sheohar","Sitamarhi","Siwan","Supaul","Vaishali","West Champaran"],
+      "Chhattisgarh": ["Balod","Baloda Bazar","Balrampur","Bastar","Bemetara","Bijapur","Bilaspur","Dantewada","Dhamtari","Durg","Gariaband","Janjgir Champa","Jashpur","Kabirdham","Kanker","Kondagaon","Korba","Koriya","Mahasamund","Mungeli","Narayanpur","Raigarh","Raipur","Rajnandgaon","Sukma","Surajpur","Surguja"],
+      "Goa": ["North Goa","South Goa"],
+      "Gujarat": ["Ahmedabad","Amreli","Anand","Aravalli","Banaskantha","Bharuch","Bhavnagar","Botad","Chhota Udaipur","Dahod","Dang","Devbhoomi Dwarka","Gandhinagar","Gir Somnath","Jamnagar","Junagadh","Kheda","Kutch","Mahisagar","Mehsana","Morbi","Narmada","Navsari","Panchmahal","Patan","Porbandar","Rajkot","Sabarkantha","Surat","Surendranagar","Tapi","Vadodara","Valsad"],
+      "Haryana": ["Ambala","Bhiwani","Charkhi Dadri","Faridabad","Fatehabad","Gurugram","Hisar","Jhajjar","Jind","Kaithal","Karnal","Kurukshetra","Mahendragarh","Mewat","Palwal","Panchkula","Panipat","Rewari","Rohtak","Sirsa","Sonipat","Yamunanagar"],
+      "Himachal Pradesh": ["Bilaspur","Chamba","Hamirpur","Kangra","Kinnaur","Kullu","Lahaul Spiti","Mandi","Shimla","Sirmaur","Solan","Una"],
+      "Jammu and Kashmir": ["Anantnag","Bandipora","Baramulla","Budgam","Doda","Ganderbal","Jammu","Kargil","Kathua","Kishtwar","Kulgam","Kupwara","Leh","Poonch","Pulwama","Rajouri","Ramban","Reasi","Samba","Shopian","Srinagar","Udhampur"],
+      "Jharkhand": ["Bokaro","Chatra","Deoghar","Dhanbad","Dumka","East Singhbhum","Garhwa","Giridih","Godda","Gumla","Hazaribagh","Jamtara","Khunti","Koderma","Latehar","Lohardaga","Pakur","Palamu","Ramgarh","Ranchi","Sahebganj","Seraikela Kharsawan","Simdega","West Singhbhum"],
+      "Karnataka": ["Bagalkot","Bangalore Rural","Bangalore Urban","Belgaum","Bellary","Bidar","Vijayapura","Chamarajanagar","Chikkaballapur","Chikkamagaluru","Chitradurga","Dakshina Kannada","Davanagere","Dharwad","Gadag","Gulbarga","Hassan","Haveri","Kodagu","Kolar","Koppal","Mandya","Mysore","Raichur","Ramanagara","Shimoga","Tumkur","Udupi","Uttara Kannada","Yadgir"],
+      "Kerala": ["Alappuzha","Ernakulam","Idukki","Kannur","Kasaragod","Kollam","Kottayam","Kozhikode","Malappuram","Palakkad","Pathanamthitta","Thiruvananthapuram","Thrissur","Wayanad"],
+      "Madhya Pradesh": ["Agar Malwa","Alirajpur","Anuppur","Ashoknagar","Balaghat","Barwani","Betul","Bhind","Bhopal","Burhanpur","Chhatarpur","Chhindwara","Damoh","Datia","Dewas","Dhar","Dindori","Guna","Gwalior","Harda","Hoshangabad","Indore","Jabalpur","Jhabua","Katni","Khandwa","Khargone","Mandla","Mandsaur","Morena","Narsinghpur","Neemuch","Panna","Raisen","Raja Dand","Rajgarh","Ratlam","Rewa","Sagar","Satna","Sehore","Sewree","Shajapur","Shivpuri","Singrauli","Tikamgarh","Ujjain","Umaria","Vidisha"],
+      "Maharashtra": ["Ahmednagar","Akola","Amravati","Aurangabad","Beed","Bhandara","Buldhana","Chandrapur","Dhule","Gadchiroli","Gondia","Hingoli","Jalgaon","Jalna","Kolhapur","Latur","Mumbai City","Mumbai Suburban","Nagpur","Nanded","Nandurbar","Nasik","Osmanabad","Palghar","Parbhani","Pune","Raigad","Ratnagiri","Sindhudurg","Solapur","Thane","Wardha","Washim","Yavatmal"],
+      "Manipur": ["Bishnupur","Churachandpur","Imphal East","Imphal West","Jiribam","Kakching","Kamjong","Kangpokpi","Noney","Pherzawl","Senapati","Tengnoupal","Thoubal","Ukhrul"],
+      "Meghalaya": ["East Garo Hills","East Jaintia Hills","East Khasi Hills","North Garo Hills","Ri Bhoi","South Garo Hills","South West Garo Hills","South West Khasi Hills","West Garo Hills","West Jaintia Hills","West Khasi Hills"],
+      "Mizoram": ["Aizawl","Champhai","Hnahthial","Kolasib","Lawngtlai","Lunglei","Mamit","Saiha","Serchhip"],
+      "Nagaland": ["Dimapur","Kiphire","Kohima","Longleng","Mokokchung","Mon","Phek","Tuensang","Wokha","Zunheboto"],
+      "Odisha": ["Angul","Balangir","Balasore","Bargarh","Bhadrak","Boudh","Cuttack","Deogarh","Dhenkanal","Gajapati","Ganjam","Jajpur","Janjgir Champa","Jhargram","Jharsuguda","Kalahandi","Kandhamal","Kendrapara","Kendujhar","Khurda","Koraput","Malkangiri","Nabarangpur","Nayagarh","Nuapada","Rayagada","Sambalpur","Subarnapur","Sundargarh"],
+      "Puducherry": ["Karaikal","Mahe","Puducherry","Yanam"],
+      "Punjab": ["Amritsar","Barnala","Bathinda","Faridkot","Fatehgarh Sahib","Fazilka","Firozpur","Gurdaspur","Hoshiarpur","Jalandhar","Kapurthala","Ludhiana","Mansa","Moga","Mohali","Moga","Pathankot","Patiala","Rupnagar","Sangrur","SAS Nagar","Shaheed Bhagat Singh Nagar","Sri Muktsar Sahib","Tarn Taran"],
+      "Rajasthan": ["Ajmer","Alwar","Banswara","Baran","Barmer","Bharatpur","Bhilwara","Bikaner","Bundi","Chittorgarh","Dungarpur","Hanumangarh","Jaipur","Jaisalmer","Jalore","Jhalawar","Jhunjhunu","Jodhpur","Karauli","Nagaur","Pali","Rajasthan","Sawai Madhopur","Sikar","Sirohi","Tonk","Udaipur"],
+      "Sikkim": ["East Sikkim","North Sikkim","South Sikkim","West Sikkim"],
+      "Tamil Nadu": ["Ariyalur","Chengalpattu","Chennai","Coimbatore","Cuddalore","Dharmapuri","Dindigul","Erode","Kallakurichi","Kanchipuram","Kanyakumari","Karur","Krishnagiri","Madurai","Nagapattinam","Nilgiris","Perambalur","Pudukkottai","Ramanathapuram","Ranipet","Salem","Sivaganga","Tenkasi","Thanjavur","Theni","Tiruchirappalli","Tirunelveli","Tirupathur","Tiruppur","Tiruvallur","Tiruvannamalai","Tirupur","Vellore","Viluppuram","Virudhunagar"],
+      "Telangana": ["Adilabad","Bhadradri Kothagudem","Hyderabad","Jagtial","Jangaon","Jammikunta","Jayashankar Bhupalpalli","Jogulamba Gadwal","Kamareddy","Karimnagar","Khammam","Mahabubabad","Mahabubnagar","Mancherial","Medak","Medchal-Malkajgiri","Nalgonda","Nirmal","Nizamabad","Peddapalli","Rajanna Sircilla","Rangareddy","Sangareddy","Warangal Rural","Warangal Urban","Yadadri Bhuvanagiri"],
+      "Tripura": ["Dhalai","Khowai","North Tripura","Sepahijala","South Tripura","Unakoti","West Tripura"],
+      "Uttar Pradesh": ["Agra","Aligarh","Ambedkar Nagar","Amethi","Amroha","Auraiya","Azamgarh","Badaun","Baghpat","Bahraich","Balrampur","Banda","Bareilly","Basti","Bijnor","Bulandshahr","Chandauli","Chitrakoot","Deoria","Etah","Etawah","Faizabad","Farrukhabad","Fatehpur","Firozabad","Gautam Buddha Nagar","Ghaziabad","Gonda","Gorakhpur","Hapur","Hardoi","Hathras","Jalaun","Jaunpur","Jhansi","Kannauj","Kanpur","Kasganj","Kaushambi","Kushinagar","Lakhimpur Kheri","Lalitpur","Lucknow","Mau","Meerut","Mirzapur","Moradabad","Muzaffarnagar","Pilibhit","Pratapgarh","Raebareli","Rampur","Saharanpur","Sambhal","Sant Kabir Nagar","Shahjahanpur","Shamli","Shravasti","Siddharthnagar","Sitapur","Sonbhadra","Sultanpur","Unnao","Varanasi"],
+      "Uttarakhand": ["Almora","Bageshwar","Chamoli","Champawat","Dehradun","Haridwar","Nainital","Pauri Garhwal","Pithoragarh","Rudraprayag","Tehri Garhwal","Udham Singh Nagar","Uttarkashi"],
+      "West Bengal": ["Alipurduar","Bankura","Bardhaman","Birbhum","Bishnupur","Cooch Behar","Darjeeling","Hooghly","Howrah","Jalpaiguri","Jhargram","Kalimpong","Kolkata","Malda","Medinipur","Murshidabad","Nadia","North 24 Parganas","South 24 Parganas","Paschim Bardhaman","Purba Bardhaman","Purulia","Uttar Dinajpur","Dakshin Dinajpur"],
+      "Andaman and Nicobar Islands": ["Andaman Islands","Nicobar Islands"],
+      "Chandigarh": ["Chandigarh"],
+      "Dadra and Nagar Haveli and Daman and Diu": ["Dadra and Nagar Haveli","Daman","Diu"],
+      "Delhi": ["Delhi"],
+      "Lakshadweep": ["Lakshadweep"],
+      "Ladakh": ["Ladakh"],
+      "Puducherry": ["Karaikal","Mahe","Puducherry","Yanam"]
+    };
+
+    function updateDistricts() {
+      var state = $('#inputState').val();
+      var districtDropdown = $('#inputDistrict');
+      
+      districtDropdown.empty();
+      districtDropdown.append('<option value="">-- select one --</option>');
+
+      if (statesDistricts[state]) {
+        $.each(statesDistricts[state], function(index, district) {
+          districtDropdown.append('<option value="' + district + '">' + district + '</option>');
+        });
+      }
+    }
+  </script>
+</body>
+</html>

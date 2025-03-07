@@ -14,24 +14,27 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static 
 from django.contrib import admin
 from django.urls import path
-from app.views import home ,sell,insert ,seeds ,insert1
+from app.views import home ,sell,insert ,seeds ,insert1 ,fer, insert2 , buy , seeds_buy , fer_buy ,crop_buy
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',home),
     path("sell/",sell,name='sell'),
+    path('buy/',buy,name='buy'),
      # path('', buy),
     # path("sell/",sell,name='sell'),
     # path('crop/',crop,name='crop'),
-    # path('crop_buy/',crop_buy,name='crop_buy'),
-    # path('seeds_buy/',seeds_buy,name='seeds_buy'),
-    # path('fer_buy/',fer_buy,name='fer_buy'),
+    path('crop_buy/',crop_buy,name='crop_buy'),
+    path('seeds_buy/',seeds_buy,name='seeds_buy'),
+    path('fer_buy/',fer_buy,name='fer_buy'),
     path('seeds/',seeds,name='seeds'),
-    # path('fer/',fer,name='fer'),
+    path('fer/',fer,name='fer'),
     path('insert/', insert, name='insert'),
-    #  path('insert2/', insert2, name='insert2'),
+     path('insert2/', insert2, name='insert2'),
     # path('sell/sell/', sell, name='sell'),
     path('insert1/', insert1, name='insert1'),
     # path('search',search,name='search')
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

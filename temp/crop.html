@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>State and District Selector</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+  <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+        .search-container {
+            background-color: #bebebe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container form {
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        #logo {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #searchInput:focus {
+            border-color: #4CAF50;
+        }
+
+        button[type="submit"] {
+            padding: 12.5px 25px;
+            font-size: 16px;
+            border: none;
+            background-color: #0b0c0b;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .nav-container {
+            background-color: #121312;
+            display: flex;
+            justify-content: center;
+            padding: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container a:hover {
+            background-color: #050605;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            color: #111111;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="number"], input[type="email"], select, textarea, input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #060606;
+        }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-container">
+      <a href="/crop/">Crop</a>
+      <a href="/seeds/">Seed</a>
+      <a href="PlantingMaterial.html">Planting Material</a>
+      <a href="/fer/">Fertilizers</a>
+      <a href="Equipment.html">Equipment</a>
+      <a href="Animal.html">Animal Husbandry</a>
+  </div>
+
+  <div class="form-container">
+    <h2>Crop</h2>
+    <form action="{% url 'insert' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <label for="crop_name">Crop Name</label>
+      <input type="text" id="crop_name" name="crop_name" placeholder="Enter crop name" required>
+
+      <label for="crop_type">Crop Type</label>
+      <select id="crop_type" name="crop_type" required>
+          <option value="">Select crop type</option>
+          <option value="Fruits">Fruits</option>
+          <option value="Vegetables">Vegetables</option>
+          <option value="Grains">Grains</option>
+          <option value="Others">Others</option>
+      </select>
+
+      <label for="quantity">Quantity (in kg)</label>
+      <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required>
+
+      <label for="price">Price (per kg)</label>
+      <input type="number" id="price" name="price" placeholder="Enter price" required>
+
+      <label for="contact_name">Seller's Name</label>
+      <input type="text" id="contact_name" name="contact_name" placeholder="Enter your name" required>
+
+      <label for="contact_email">Email</label>
+      <input type="email" id="contact_email" name="contact_email" placeholder="Enter your email" required>
+
+      <label for="contact_phone">Phone Number</label>
+      <input type="text" id="contact_phone" name="contact_phone" placeholder="Enter your phone number" required>
+
+      <label for="description">Description (Optional)</label>
+      <textarea id="description" name="description" rows="4" placeholder="Provide additional details about the crop (optional)"></textarea>
+
+      <label for="photo">Upload Crop Photo (Optional)</label>
+      <input type="file" id="photo" name="photo" accept="image/*">
+
+      <label for="state">State</label>
+      <select id="state" name="state" required>
+          <option value="">Select state</option>
+          <option value="Andhra Pradesh">Andhra Pradesh</option>
+          <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+          <option value="Assam">Assam</option>
+          <!-- Add other states here -->
+      </select>
+
+      <label for="district">District</label>
+      <input type="text" id="district" name="district" placeholder="Enter district" required>
+      <label for="street_address">Street Address</label>
+          <input type="text" id="street_address" name="streetAddress" placeholder="Enter street address" required>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var stateSelect = document.getElementById('state');
+      var districtInput = document.getElementById('district');
+      var statesDistricts = {
+        "Andhra Pradesh": ["Anantapur","Chittoor","East Godavari","Guntur","Kadapa","Krishna","Kurnool","Prakasam","Nellore","Srikakulam","Visakhapatnam","Vizianagaram","West Godavari"],
+        "Arunachal Pradesh": ["Anjaw","Changlang","Dibang Valley","East Kameng","East Siang","Kra Daadi","Kurung Kumey","Lohit","Longding","Lower Dibang Valley","Lower Subansiri","Namsai","Papum Pare","Siang","Tawang","Tirap","Upper Siang","Upper Subansiri","West Kameng","West Siang","Itanagar"],
+        "Assam": ["Baksa","Barpeta","Biswanath","Bongaigaon","Cachar","Charaideo","Chirang","Darrang","Dhemaji","Dhubri","Dibrugarh","Goalpara","Golaghat","Hailakandi","Hojai","Jorhat","Kamrup Metropolitan","Kamrup (Rural)","Karbi Anglong","Karimganj","Kokrajhar","Lakhimpur","Majuli","Morigaon","Nagaon","Nalbari","Dima Hasao","Sivasagar","Sonitpur","South Salmara Mankachar","Tinsukia","Udalguri","West Karbi Anglong"],
+        // Add other states and districts here...
+      };
+
+      stateSelect.addEventListener('change', function() {
+        var state = this.value;
+        var districts = statesDistricts[state] || [];
+        districtInput.value = districts.length > 0 ? districts[0] : ''; // Set a default district or clear it
+      });
+    });
+  </script>
+</body>
+</html>
