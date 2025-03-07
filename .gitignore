@@ -22,3 +22,11 @@ myproject/crop_photos/
 
 # Django environment variables
 .env
+
+# Static and media files (optional)
+staticfiles/
+media/
+
+# IDE & Editor Files
+.vscode/
+.idea/
