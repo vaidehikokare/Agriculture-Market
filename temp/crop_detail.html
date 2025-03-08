@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ crop.crop_name }} Details</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'detail_styles.css' %}">
+</head>
+<body>
+    <div class="crop-detail-container">
+        <h1 style="color: green;">{{ crop.crop_name }} Details</h1>
+        <div class="image-container">
+            {% if crop.photo %}
+                <img src="{{ crop.photo.url }}" alt="{{ crop.crop_name }}">
+            {% else %}
+                <img src="{% static 'default_crop_image.jpg' %}" alt="No Image Available">
+            {% endif %}
+        </div>
+
+        <div class="crop-info">
+            <table>
+                <tr><td><strong>Type:</strong></td> <td>{{ crop.crop_type }}</td></tr>
+                <tr><td><strong>Quantity:</strong></td> <td>{{ crop.quantity }} kg</td></tr>
+                <tr><td><strong>Price:</strong></td> <td class="price">₹{{ crop.price }} per kg</td></tr>
+                <tr><td><strong>Seller:</strong></td> <td>{{ crop.contact_name }}</td></tr>
+                <tr><td><strong>Phone:</strong></td> <td><a href="tel:{{ crop.contact_phone }}">{{ crop.contact_phone }}</a></td></tr>
+                <tr><td><strong>Email:</strong></td> <td><a href="mailto:{{ crop.contact_email }}">{{ crop.contact_email }}</a></td></tr>
+                <tr><td><strong>Location:</strong></td> <td>{{ crop.state }}, {{ crop.district }}</td></tr>
+                <tr><td><strong>Street Address:</strong></td> <td>{{ crop.street_address }}</td></tr>
+                {% if crop.description %}
+                    <tr><td><strong>Description:</strong></td> <td>{{ crop.description }}</td></tr>
+                {% endif %}
+            </table>
+        </div>
+
+    
+    </div>
+</body>
+</html>

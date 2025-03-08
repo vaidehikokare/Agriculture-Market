@@ -162,7 +162,6 @@
 
           <label for="photo">Upload Crop Photo (Optional)</label>
           <input type="file" id="photo" name="photo" accept="image/*">
-
           <label for="state">State</label>
           <select id="state" name="state" required onchange="updateDistricts()">
               <option value="">Select state</option>
@@ -176,7 +175,9 @@
           <select id="district" name="district" required>
               <option value="">Select district</option>
           </select>
-
+          <label for="street_address">Street Address</label>
+          <input type="text" id="street_address" name="street_address" placeholder="Enter street address" required>
+  
           <button type="submit">Submit</button>
       </form>
   </div>

@@ -25,16 +25,17 @@
             <i class="fa fa-search" id="search_btn"></i> 
             <i class="fa fa-user" id="user"></i> 
         </div>
-        <form class="search-form" action="{% url 'search' %}">
+        <form class="search-form" action="{% url 'search' %}" method="get">
             {% csrf_token %}
-            <input type"search" id="search" placeholder="Search Here.....">
+            <input type="search" id="search" name="search" placeholder="Search Here.....">
             <label for="search" class="fa fa-search"></label>
         </form>
+        
     </header>
     <!-- Display crops -->
     <div class="crop-container">
         {% for crop in crops %}
-        <div class="crop-card">
+        <div class="crop-card" onclick="openCropDetail('{{ crop.id }}')">
             {% if crop.photo %}
             <img src="{{ crop.photo.url }}" alt="{{ crop.crop_name }}">
             {% else %}
@@ -44,15 +45,6 @@
             <p>Type: {{ crop.crop_type }}</p>
             <p>Seller: {{ crop.contact_name }}</p>
             <p class="price">Price: ₹{{ crop.price }} per kg</p>
-            <!-- <div class="contact-info">
-                <p>Seller: {{ crop.contact_name }}</p>
-                <p>Email: {{ crop.contact_email }}</p>
-                <p>Phone: {{ crop.contact_phone }}</p>
-            </div>
-            <div class="location">
-                <p>Location: {{ crop.state }}, {{ crop.district }}</p>
-            </div> -->
-        <!-- </div> -->
         </div>
         {% endfor %}
     </div>
@@ -62,6 +54,10 @@
         document.querySelector('#search_btn').onclick = () => {
             searchForm.classList.toggle('active');
         };
+
+          function openCropDetail(cropId) {
+        window.location.href = "/crop_detail/" + cropId + "/"; 
+    }
     </script>
 </body>
 </html>

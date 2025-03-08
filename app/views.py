@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Crop , Seeds ,Fer
 from django.urls import reverse
 from django.conf import settings
+from django.shortcuts import render, get_object_or_404 
 # from .forms import CropForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages 
@@ -145,3 +146,14 @@ def crop_buy(request):
 def fer_buy(request):
      crops = Fer.objects.all()  # Fetch all records from the Crop table
      return render(request, 'fer_buy.html', {'crops': crops})
+def search(request):
+    search_query = request.GET.get('search', '')  # Retrieve the search query from the URL
+    
+    # Filter crops by name that start with the search query (case-insensitive)
+    crops = Crop.objects.filter(crop_name__istartswith=search_query)
+    
+    # Render the template and pass the crops as context
+    return render(request, 'crop_s.html', {'crops': crops, 'search_query': search_query})
+def crop_detail(request, crop_id):
+    crop = get_object_or_404(Crop, id=crop_id)
+    return render(request, 'crop_detail.html', {'crop': crop})

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Crops for Sale</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles3.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+{% load static %} 
+<!-- <h2 style="text-align: center; font-size: larger;">Search Results</h2> -->
+
+<!-- Search Form -->
+<!-- <form class="search-form" action="{% url 'search' %}" method="get">
+    {% csrf_token %}
+    <input type="search" id="search" name="search" placeholder="Search Here....." value="{{ search_query }}">
+    <label for="search" class="fa fa-search"></label>
+</form> -->
+
+<!-- Display search results in a grid of crop cards -->
+<div class="crop-container">
+    {% for crop in crops %}
+    <div class="crop-card" onclick="openCropDetail('{{ crop.id }}')">
+        {% if crop.photo %}
+        <img src="{{ crop.photo.url }}" alt="{{ crop.crop_name }}">
+        {% else %}
+        <img src="{% static 'default_crop_image.jpg' %}" alt="No Image Available">
+        {% endif %}
+        <h2>{{ crop.crop_name }}</h2>
+        <p>Type: {{ crop.crop_type }}</p>
+        <p>Seller: {{ crop.contact_name }}</p>
+        <p class="price">Price: ₹{{ crop.price }} per kg</p>
+    </div>
+    {% endfor %}
+</div>
+<script>
+
+      function openCropDetail(cropId) {
+    window.location.href = "/crop_detail/" + cropId + "/"; 
+}
+</script>
+</body>
+</html>

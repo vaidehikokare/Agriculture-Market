@@ -18,7 +18,7 @@ from django.conf import settings
 from django.conf.urls.static import static 
 from django.contrib import admin
 from django.urls import path
-from app.views import home ,sell,insert ,seeds ,insert1 ,fer, insert2 , buy , seeds_buy , fer_buy ,crop_buy
+from app.views import home ,sell,insert ,seeds ,insert1 ,fer, insert2 , buy , seeds_buy , fer_buy ,crop_buy ,search ,crop_detail
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',home),
@@ -36,5 +36,6 @@ urlpatterns = [
      path('insert2/', insert2, name='insert2'),
     # path('sell/sell/', sell, name='sell'),
     path('insert1/', insert1, name='insert1'),
-    # path('search',search,name='search')
+    path('crop_detail/<int:crop_id>/', crop_detail, name='crop_detail'),
+    path('search',search,name='search')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
