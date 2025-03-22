@@ -3,40 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Available Crops for Sale</title>
+    <title>Available Products</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'styles3.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1200px;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            padding: 20px;
+            width: 250px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .card img {
+            width: 100%;
+            height: 150px;
+            border-radius: 5px;
+            object-fit: cover;
+            transition: 0.3s;
+        }
+        .card h2 {
+            color: #2e7d32;
+            font-size: 20px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+        .card p {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 0;
+            transition: 0.3s;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(46, 125, 50, 0.1), rgba(46, 125, 50, 0.3));
+            opacity: 0;
+            transition: 0.3s;
+            z-index: 1;
+        }
+        .card:hover::before {
+            opacity: 1;
+        }
+        .card:hover img {
+            transform: scale(1.1);
+        }
+        .card:hover h2 {
+            color: #1b5e20;
+        }
+        .card:hover p {
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <a href="logo.png" class="logo">
-            <img src="{% static 'logo.png' %}" alt="Logo">
-        </a>
-        <nav class="navbar">
-            <a href="/crop_buy/">Crop</a>
-            <a href="/seeds_buy/">Seed</a>
-            <a href="PlantingMaterial.html">Planting Material</a>
-            <a href="/fer_buy/">Fertilizers</a>
-            <a href="Equipment.html">Equipment</a>
-            <a href="Animal.html">Animal Husbandry</a>
-        </nav>
-        <div class="icons">
-            <i class="fa fa-search" id="search_btn"></i> 
-            <i class="fa fa-user" id="user"></i> 
+    <h1>Buy Agricultural Products</h1>
+    <div class="container">
+        <div class="card" onclick="opencrop()">
+            <h2>Buy Crops</h2>
+            <img src="{% static 'crop.png' %}" alt="Crops">
+            <p>Explore a wide variety of fresh and organic crops directly from local farms. Perfect for your kitchen or business needs.</p>
         </div>
-        <form class="search-form">
-            <input type"search" id="search" placeholder="Search Here.....">
-            <label for="search" class="fa fa-search"></label>
-        </form>
-    </header>
-    <!-- Display crops -->
+        <div class="card"  onclick="openseeds()">
+            <h2>Buy Seeds</h2>
+            <img src="{% static 'seeds1.jpg' %}" alt="Seeds">
+            <p>High-quality seeds for fruits, vegetables, and grains. Grow your own garden with our trusted seed collection.</p>
+        </div>
+        <div class="card" onclick="window.location.href = '/fer_buy/'">
+            <h2>Buy Fertilizers</h2>
+            <img src="{% static 'fer.jpg' %}" alt="Fertilizers">
+            <p>Boost your crop yield with our range of organic and chemical fertilizers. Tailored for all types of soil.</p>
+        </div>
+        <div class="card">
+            <h2>Planting Material</h2>
+            <img src="{% static 'plant.jpg' %}" alt="Planting Material">
+            <p>Get the best planting materials, including saplings, cuttings, and grafts, to ensure a healthy harvest.</p>
+        </div>
+        <div class="card">
+            <h2>Animal Husbandry</h2>
+            <img src="{% static 'animal.jpg' %}" alt="Animal Husbandry">
+            <p>Discover products and tools for livestock care, including feed, supplements, and health solutions.</p>
+        </div>
+        <div class="card">
+            <h2>Farming Equipment</h2>
+            <img src="{% static 'equipment.jpg' %}" alt="Equipment">
+            <p>Modern and efficient farming tools and machinery to make your agricultural tasks easier and faster.</p>
+        </div>
+    </div>
     <script>
-        let searchForm = document.querySelector(".search-form");
-
-        document.querySelector('#search_btn').onclick = () => {
-            searchForm.classList.toggle('active');
-        };
+        function opencrop() {
+            window.location.href = "/crop_buy/";
+        }
+        function openseeds() {
+            window.location.href = "/seeds_buy/";
+        }
     </script>
 </body>
 </html>

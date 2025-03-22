@@ -7,6 +7,8 @@
   {% load static %}
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Add Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   
   <style>
       :root {
@@ -40,6 +42,11 @@
           width: 80px;
       }
 
+      .navbar {
+          display: flex;
+          align-items: center;
+      }
+
       .navbar a {
           color: var(--secondary-color);
           margin: 0 15px;
@@ -50,6 +57,23 @@
       }
 
       .navbar a:hover {
+          color: var(--primary-color);
+      }
+
+      .icons {
+          display: flex;
+          align-items: center;
+          gap: 20px; /* Space between icons */
+      }
+
+      .notification-icon, .profile-icon {
+          font-size: 24px;
+          color: var(--secondary-color);
+          cursor: pointer;
+          transition: color 0.3s ease-in-out;
+      }
+
+      .notification-icon:hover, .profile-icon:hover {
           color: var(--primary-color);
       }
 
@@ -93,7 +117,6 @@
       button {
           width: 100%;
           background: var(--primary-color);
-          color: white;
           padding: 12px;
           font-size: 18px;
           border: none;
@@ -104,8 +127,58 @@
       }
 
       button:hover {
-          background: #218838;
+          background: #21883700;
       }
+      .sidebar {
+    position: fixed;
+    top: 0;
+    left: -400px;  /* Initially hidden */
+    
+    color: black;
+    transition: 0.3s ease-in-out;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    background: linear-gradient(to top, #145A32, #2ECC71); /* Dark Green to Light Green */
+    color: white; /* Text color for contrast */
+    padding: 20px;
+    height: 100vh; /* Full height */
+    width: 280px; /* Adjust width */
+}
+
+/* Sidebar active (shown) */
+.sidebar.active {
+    left: 0;
+}
+
+/* Sidebar header */
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* Close button */
+.close-btn {
+    background: none;
+    border: rgba(0, 128, 0, 0);
+    color: white;
+    font-size: 24px;
+}
+
+.sidebar-content {
+    margin-top: 20px;
+}
+
+.sidebar-content p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
   </style>
 </head>
 
@@ -122,12 +195,67 @@
           <a href="/fer/">Fertilizers</a>
           <a href="Equipment.html">Equipment</a>
           <a href="Animal.html">Animal Husbandry</a>
+          <!-- Add notification and profile icons here -->
+          <div class="icons">
+            <div>
+                <div class="order-icon" onclick="redirectToOrders()">
+                    <i class="fas fa-box"></i>
+                    <span class="order-count"></span> 
+                </div>
+                
+            </div>
+              
+                <div class="profile-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div> 
+             
+          </div>
+          
       </nav>
   </header>
+ 
+  <div class="sidebar" id="sidebar" style="background: linear-gradient(135deg, #2E7D32, #1B5E20); color: white; width: 339.9px; padding: 20px;  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); font-family: 'Poppins', sans-serif;">
+    <div class="sidebar-header" style="text-align: center; border-bottom: 2px solid #A5D6A7; padding-bottom: 10px; margin-bottom: 15px;">
+        <h2 style="margin: 0; font-size: 24px; color: #E8F5E9;">Profile</h2>
+    </div>
+
+    <div class="profile-details">
+        <p style="margin: 10px 0; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-user" style="color: #FFF59D;"></i> <strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}
+        </p>
+        <p style="margin: 10px 0; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-envelope" style="color: #FFCC80;"></i> <strong>Email:</strong> {{ user.email }}
+        </p>
+        <p style="margin: 10px 0; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-user-tag" style="color: #80DEEA;"></i> <strong>Username:</strong> {{ user.username }}
+        </p>
+
+        <h3 style="margin-top: 20px; font-size: 18px; color: #E8F5E9; border-bottom: 2px solid #A5D6A7; padding-bottom: 5px;">
+            <i class="fas fa-seedling" style="color: #C5E1A5;"></i> Your Listed Products
+        </h3>
+
+        <ul style="list-style: none; padding: 0; margin-top: 10px;">
+            <li style="background: #388E3C; padding: 12px; margin-top: 8px; border-radius: 6px; text-align: center; font-size: 16px; transition: all 0.3s ease-in-out;">
+                <a href="{% url 'crop_display'%}?email={{user.email}}" style="color: #E8F5E9; text-decoration: none; font-weight: bold; display: block;">Crops</a>
+            </li>
+            <li style="background: #388E3C; padding: 12px; margin-top: 8px; border-radius: 6px; text-align: center; font-size: 16px; transition: all 0.3s ease-in-out;">
+                <a href="/fertilizers" style="color: #E8F5E9; text-decoration: none; font-weight: bold; display: block;">Fertilizers</a>
+            </li>
+            <li style="background: #388E3C; padding: 12px; margin-top: 8px; border-radius: 6px; text-align: center; font-size: 16px; transition: all 0.3s ease-in-out;">
+                <a href="/seeds" style="color: #E8F5E9; text-decoration: none; font-weight: bold; display: block;">Seeds</a>
+            </li>
+            <li style="background: #388E3C; padding: 12px; margin-top: 8px; border-radius: 6px; text-align: center; font-size: 16px; transition: all 0.3s ease-in-out;">
+                <a href="/planting-material" style="color: #E8F5E9; text-decoration: none; font-weight: bold; display: block;">Planting Material</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
 
   <div class="form-container">
       <h2>Crop Details</h2>
-      <form action="{% url 'insert' %}" method="POST" enctype="multipart/form-data">
+      <form action="{% url 'insert' user.id%}" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
 
           <label for="crop_name">Crop Name</label>
@@ -183,29 +311,57 @@
   </div>
 
   <script>
-      function updateDistricts() {
-          let state = document.getElementById("state").value;
-          let districtDropdown = document.getElementById("district");
+    function updateDistricts() {
+        let state = document.getElementById("state").value;
+        let districtDropdown = document.getElementById("district");
 
-          let districts = {
-              "Maharashtra": ["Pune", "Mumbai", "Nagpur", "Nashik", "Aurangabad"],
-              "Karnataka": ["Bengaluru", "Mysuru", "Hubli", "Mangaluru"],
-              "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
-              "Others": ["Other District"]
-          };
+        let districts = {
+            "Maharashtra": ["Pune", "Mumbai", "Nagpur", "Nashik", "Aurangabad"],
+            "Karnataka": ["Bengaluru", "Mysuru", "Hubballi", "Mangaluru", "Belagavi"],
+            "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Gandhinagar"],
+            "Others": ["Other"]
+        };
 
-          districtDropdown.innerHTML = '<option value="">Select district</option>';
+        // Clear existing options
+        districtDropdown.innerHTML = '<option value="">Select district</option>';
 
-          if (districts[state]) {
-              districts[state].forEach(function(district) {
-                  let option = document.createElement("option");
-                  option.value = district;
-                  option.textContent = district;
-                  districtDropdown.appendChild(option);
-              });
-          }
-      }
-  </script>
+        if (state in districts) {
+            districts[state].forEach(function(district) {
+                let option = document.createElement("option");
+                option.value = district;
+                option.textContent = district;
+                districtDropdown.appendChild(option);
+            });
+        }
+    }
 
+    document.addEventListener("DOMContentLoaded", function () {
+    const profileIcon = document.querySelector(".profile-icon");
+    const sidebar = document.getElementById("sidebar");
+    const closeSidebar = document.getElementById("closeSidebar");
+
+    profileIcon.addEventListener("click", function () {
+        sidebar.classList.toggle("active");
+    });
+
+    closeSidebar.addEventListener("click", function () {
+        sidebar.classList.remove("active");
+    });
+
+    // Close sidebar when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!sidebar.contains(event.target) && !profileIcon.contains(event.target)) {
+            sidebar.classList.remove("active");
+        }
+    });
+});
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+}
+function redirectToOrders() {
+    window.location.href = "{% url 'orders'%}?email={{user.email}}"; // Change "/orders" to your actual orders page URL
+}
+
+</script>
 </body>
 </html>

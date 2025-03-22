@@ -96,3 +96,32 @@ class Fer(models.Model):
 
     class Meta:
         db_table = 'fer'
+
+class sell_register(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    username= models.CharField(max_length=255,unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'sell_register'
+class Buy_register(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    username= models.CharField(max_length=255,unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'Buy_register'    
+
+class Order(models.Model):
+    product_name= models.CharField(max_length=255)
+    product_id=models.DecimalField(max_digits=10, decimal_places=2)
+    product_type = models.CharField(max_length=255)
+    buyer_name = models.CharField(max_length=100)
+    buyer_email = models.EmailField()
+    buyer_phone = models.CharField(max_length=15)
+    quantity = models.PositiveIntegerField()
+          

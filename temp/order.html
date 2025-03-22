@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .order-container {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .order-info {
+            flex-grow: 1;
+        }
+        .order-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .order-details {
+            font-size: 14px;
+        }
+        .btn-container {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 8px 12px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            flex: 1;
+            text-align: center;
+        }
+        .accept {
+            background-color: #28a745;
+        }
+        .reject {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Order List</h2>
+
+    {% for order in order %}
+    <div class="order-container">
+        <div class="order-info">
+            <div class="order-header">
+                {{ order.product_name }} ({{ order.product_type }})
+            </div>
+            <div class="order-details">
+                <strong>Buyer:</strong> {{ order.buyer_name }} | 
+                <strong>Email:</strong> {{ order.buyer_email }} | 
+                <strong>Phone:</strong> {{ order.buyer_phone }} | 
+                <strong>Quantity:</strong> {{ order.quantity }} KG
+            </div>
+        </div>
+        <div class="btn-container">
+            <button class="btn accept" onclick="handleOrder({{ order.id }})">Accept</button>
+            <button class="btn reject" onclick="handleOrder1({{ order.id }})">Reject</button>
+        </div>
+    </div>
+    {% endfor %}
+    
+
+    <script>
+        function handleOrder(orderId) {
+            window.location.href = `/accept_order/${orderId}/`;
+        }
+    
+        function handleOrder1(orderId) {
+            window.location.href = `/reject_order/${orderId}/`;
+        }
+    </script>
+    
+</body>
+</html>
