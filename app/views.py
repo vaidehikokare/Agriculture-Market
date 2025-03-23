@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -365,10 +366,47 @@ def order_action(request, order_id, action):
 
 def accept_order(request, order_id):
     order = get_object_or_404(Order, id=order_id)
+    buyer_email = order.buyer_email
+
+    
+    subject = "Order Confirmation - Your Order Has Been Accepted"
+    message = f"""
+    Dear {order.buyer_name},
+
+    We are pleased to inform you that your order has been accepted. Thank you for choosing our platform for your purchase.
+
+    Here are your order details:
+    - Order ID: {order.id}
+    - Product Name: {order.product_name}
+    
+
+    If you have any questions or need further assistance, feel free to contact our support team.
+
+    Best regards,
+    Your AgriTech
+    9503101433
+    """
+
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email="kokarevaidehi2@gmail.com",
+        recipient_list=[buyer_email],
+        fail_silently=False,
+    )
     order.delete()
     return HttpResponse({"message: Order accepted successfully."})
 
 def reject_order(request, order_id):
     order = get_object_or_404(Order, id=order_id)
+    buyer_email = order.buyer_email
+    print(buyer_email)
     order.delete()
+    send_mail(
+        subject="Order Rejected",
+        message=f"Dear {order.buyer_name},\n\nUnfortunately, your order has been rejected. We apologize for any inconvenience.",
+        from_email="kokarevaidehi2@gmail.com",
+        recipient_list=[buyer_email],
+        fail_silently=False,
+    )
     return HttpResponse({"message : Order rejected successfully."})
