@@ -25,7 +25,7 @@
             <i class="fa fa-search" id="search_btn"></i> 
             <i class="fa fa-user" id="user"></i> 
         </div>
-        <form class="search-form">
+        <form class="search-form" action="{% url 'search_seeds' %}" method="get">
             <input type"search" id="search" placeholder="Search Here.....">
             <label for="search" class="fa fa-search"></label>
         </form>

@@ -16,7 +16,7 @@
         <h2 class="text-center mb-4 fw-bold text-success">Register</h2>
         
         <form  method="POST" action="{% url 'buy_register_view' %}">
-           
+             {% csrf_token %}
             <div class="mb-3">
                 <label for="first_name" class="form-label fw-semibold">First Name</label>
                 <input type="text" id="first_name" name="first_name" class="form-control p-2" placeholder="Enter your first name" required>

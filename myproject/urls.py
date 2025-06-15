@@ -20,6 +20,7 @@ from django.contrib import admin
 from django.urls import path
 from app.views import buy_signup , buy_register_view ,buy_login1 , crop_display ,view_details_crop , crop_delete , buy_product , confirm_order ,orders ,order_action ,accept_order,reject_order
 from app.views import home ,sell,insert ,seeds ,insert1 ,fer, insert2 , buy , seeds_buy , fer_buy ,crop_buy ,search ,crop_detail,sell_login,sell_signup,sell_register_view,sell_login1,buy_login
+from app.views import search_seeds , agri_weather_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',home),
@@ -55,5 +56,7 @@ urlpatterns = [
     path('orders/',orders,name='orders'),
     path('order_action/<int:order_id>/',order_action,name='order_action'),
     path('accept_order/<int:order_id>/',accept_order,name='accept_order'),
-    path('reject_order/<int:order_id>/',reject_order,name='reject_order')
+    path('reject_order/<int:order_id>/',reject_order,name='reject_order'),
+    path('search_seeds/',search_seeds,name='search_seeds'),
+    path('agri_weather_view/', agri_weather_view, name='agri_weather_view'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

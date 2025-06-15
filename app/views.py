@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from bs4 import BeautifulSoup
+import requests
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
@@ -161,6 +163,8 @@ def search(request):
     
     # Filter crops by name that start with the search query (case-insensitive)
     crops = Crop.objects.filter(crop_name__istartswith=search_query)
+
+
     
     # Render the template and pass the crops as context
     return render(request, 'crop_s.html', {'crops': crops, 'search_query': search_query})
@@ -348,9 +352,10 @@ def confirm_order(request, crop_id):
     return render(request, "buy_product.html", {"crop": crop})  # Corrected dictionary key
 
 def orders(request):
-    email = request.GET.get('email')  
-    order = Order.objects.filter(buyer_email =email) 
-    return render(request, "order.html", {"order": order})
+    email = request.GET.get('email')
+    crops= Crop.objects.filter(contact_email=email)
+    orders = Order.objects.filter(product_id__in=crops.values_list('id', flat=True))
+    return render(request, "order.html", {"order": orders})
 def order_action(request, order_id, action):
     order = get_object_or_404(Order, id=order_id)
 
@@ -410,3 +415,90 @@ def reject_order(request, order_id):
         fail_silently=False,
     )
     return HttpResponse({"message : Order rejected successfully."})
+
+def search_seeds(request):
+    search_query = request.GET.get('search', '')  
+    seeds = Seeds.objects.filter(seedName__istartswith=search_query)
+    return render(request, 'seeds_s.html', {'seeds': seeds, 'search_query': search_query})
+
+
+import requests
+from datetime import datetime, timedelta
+from bs4 import BeautifulSoup
+import urllib.parse
+from googlesearch import search
+
+def get_city_agri_weather_news(city):
+    query = f"{city} agriculture weather news"
+    agri_news = []
+    try:
+        for url in search(query, num_results=5):
+            try:
+                res = requests.get(url, timeout=5)
+                soup = BeautifulSoup(res.content, "html.parser")
+                title = soup.title.string.strip() if soup.title else url
+                agri_news.append({
+                    "title": title,
+                    "url": url
+                })
+            except:
+                continue
+    except Exception as e:
+        agri_news.append({"title": f"Unable to fetch news: {str(e)}", "url": "#"})
+
+    return agri_news
+
+def agri_weather_view(request):
+    weather_info = {}
+    rain_spans = []
+    agri_news = []
+
+    if request.method == "POST":
+        city = request.POST.get("city")
+
+        # --- Weather Section ---
+        try:
+            geo_url = f"https://geocoding-api.open-meteo.com/v1/search?name={city}"
+            geo_response = requests.get(geo_url, timeout=5).json()
+            if "results" in geo_response and geo_response["results"]:
+                lat = geo_response["results"][0]["latitude"]
+                lon = geo_response["results"][0]["longitude"]
+
+                weather_url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=precipitation_probability&current_weather=true&timezone=auto"
+                weather_response = requests.get(weather_url, timeout=5).json()
+
+                weather_info = {
+                    "city": city.capitalize(),
+                    "temperature": weather_response["current_weather"]["temperature"],
+                    "windspeed": weather_response["current_weather"]["windspeed"],
+                    "time": weather_response["current_weather"]["time"],
+                }
+
+                # Rain spans
+                times = weather_response["hourly"]["time"]
+                rains = weather_response["hourly"]["precipitation_probability"]
+                rain_hours = [
+                    datetime.fromisoformat(t) for t, r in zip(times, rains)
+                    if datetime.fromisoformat(t).date() == datetime.now().date() and r >= 30
+                ]
+                if rain_hours:
+                    start = rain_hours[0]
+                    for i in range(1, len(rain_hours)):
+                        if (rain_hours[i] - rain_hours[i - 1]) > timedelta(hours=1):
+                            rain_spans.append((start.strftime('%I:%M %p'), rain_hours[i - 1].strftime('%I:%M %p')))
+                            start = rain_hours[i]
+                    rain_spans.append((start.strftime('%I:%M %p'), rain_hours[-1].strftime('%I:%M %p')))
+            else:
+                weather_info = {"error": "Could not find coordinates for the given city."}
+        except Exception as e:
+            weather_info = {"error": f"Error retrieving data: {e}"}
+
+        # --- City Agriculture/Weather News ---
+        agri_news = get_city_agri_weather_news(city)
+       
+
+    return render(request, "agri_weather.html", {
+        "weather": weather_info,
+        "rain_spans": rain_spans,
+        "agri_news": agri_news,
+    })

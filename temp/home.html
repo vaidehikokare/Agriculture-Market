@@ -1,13 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AgriMarketing and Crop Disease Prediction</title>
     {% load static %}
+    <!-- You can remove the external CSS if you're using inline styles -->
     <link rel="stylesheet" href="{% static 'home_styles.css' %}">
-      
+
+    <style>
+        /* Button Styling */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2b7a2b;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #196619;
+            transform: scale(1.05);
+        }
+
+        /* Optional: for layout of button containers */
+        .marketplace-buttons,
+        .weather-buttons {
+            margin-top: 15px;
+        }
+    </style>
 </head>
+
 <body>
     <header>
         <div class="container">
@@ -26,7 +54,8 @@
     <section id="home" class="hero">
         <div class="container">
             <h2>Empowering Farmers with Technology</h2>
-            <p>Leverage advanced AI tools for crop disease prediction and connect with markets to grow your yield sustainably.</p>
+            <p>Leverage advanced AI tools for crop disease prediction and connect with markets to grow your yield
+                sustainably.</p>
             <a href="#features" class="btn">Explore Features</a>
         </div>
     </section>
@@ -44,14 +73,18 @@
                     <p>Buy and sell farming goods in a connected marketplace.</p>
                     <div class="marketplace-buttons">
                         <a href="/sell_login/" class="btn">Sell</a>
-                        <br/>
+                        <br />
                         <a href="/buy_login/" class="btn">Buy</a>
                     </div>
                 </div>
                 <div class="feature">
                     <h3>🌦️ Weather Insights</h3>
                     <p>Receive real-time weather updates to plan your farming activities better.</p>
+                    <div class="weather-buttons">
+                        <a href="/agri_weather_view/" class="btn" id="button">Weather Updates</a>
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -59,7 +92,8 @@
     <section id="about">
         <div class="container">
             <h2>About Us</h2>
-            <p>We aim to bring technology closer to farmers, ensuring better yields, sustainable practices, and market access. Together, we can transform agriculture.</p>
+            <p>We aim to bring technology closer to farmers, ensuring better yields, sustainable practices, and market
+                access. Together, we can transform agriculture.</p>
         </div>
     </section>
 
@@ -68,10 +102,9 @@
             <h2>Contact Us</h2>
             <p>Email: <a href="mailto:kokarevaidehi2@gmail.com">support@agrimarketing.com</a></p>
             <p>Phone: +91-95031-01433</p>
-            <!-- <p>Address: Jijamata Girls Hostel, Shivajinagar, Pune, Maharashtra, India</p> -->
             <p>&copy; 2024 AgriMarketing and Crop Disease Prediction. All Rights Reserved.</p>
         </div>
     </footer>
 </body>
-</html>
 
+</html>

@@ -1,4 +1,4 @@
-/* styles.css */
+styles.css
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -121,7 +121,22 @@ section {
     background: #196619;
     transform: scale(1.05);
 }
+.marketplace-buttons .btn {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 15px;
+    background: #2b7a2b;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
 
+.weather-buttons .btn:hover {
+    background: #196619;
+    transform: scale(1.05);
+}
 footer {
     background: #2b7a2b;
     color: #fff;
@@ -137,4 +152,20 @@ footer a {
 
 footer a:hover {
     color: #e0ffe0;
+}
+.btn {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 15px;
+    background: #2b7a2b;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+    background: #196619;
+    transform: scale(1.05);
 }
