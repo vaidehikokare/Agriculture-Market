@@ -426,27 +426,50 @@ import requests
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 import urllib.parse
-from googlesearch import search
 
 def get_city_agri_weather_news(city):
     query = f"{city} agriculture weather news"
     agri_news = []
+
     try:
         for url in search(query, num_results=5):
             try:
-                res = requests.get(url, timeout=5)
+                res = requests.get(url, timeout=5, headers={"User-Agent": "Mozilla/5.0"})
                 soup = BeautifulSoup(res.content, "html.parser")
+
+                # Extract title
                 title = soup.title.string.strip() if soup.title else url
+
+                # Try to get image using OpenGraph
+                og_image = soup.find("meta", property="og:image")
+                twitter_image = soup.find("meta", attrs={"name": "twitter:image"})
+                img_tag = soup.find("img")
+
+                if og_image and og_image.get("content"):
+                    image_url = og_image["content"]
+                elif twitter_image and twitter_image.get("content"):
+                    image_url = twitter_image["content"]
+                elif img_tag and img_tag.get("src"):
+                    image_url = img_tag["src"]
+                else:
+                    image_url = "https://via.placeholder.com/300x180.png?text=No+Image"
+
                 agri_news.append({
                     "title": title,
-                    "url": url
+                    "url": url,
+                    "img": image_url
                 })
-            except:
+            except Exception:
                 continue
     except Exception as e:
-        agri_news.append({"title": f"Unable to fetch news: {str(e)}", "url": "#"})
+        agri_news.append({
+            "title": f"Unable to fetch news: {str(e)}",
+            "url": "#",
+            "img": "https://via.placeholder.com/300x180.png?text=Error"
+        })
 
     return agri_news
+
 
 def agri_weather_view(request):
     weather_info = {}
@@ -501,4 +524,194 @@ def agri_weather_view(request):
         "weather": weather_info,
         "rain_spans": rain_spans,
         "agri_news": agri_news,
+    })
+
+
+
+
+
+
+
+
+
+import os
+import numpy as np
+from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
+from googlesearch import search
+
+
+MODEL_PATH = r"C:\Users\kokar\Desktop\django project\agri\models\crop_disease_model.h5"
+model = load_model(MODEL_PATH)
+
+# Class names as per folder structure
+CLASS_NAMES = [
+    'Pepper__bell___Bacterial_spot',
+    'Pepper__bell___healthy',
+    'Potato___Early_blight',
+    'Potato___healthy',
+    'Potato___Late_blight',
+    'Tomato___Target_Spot',
+    'Tomato___Tomato_mosaic_virus',
+    'Tomato___Tomato_YellowLeaf__Curl_Virus',
+    'Tomato___Bacterial_spot',
+    'Tomato___Early_blight',
+    'Tomato___healthy',
+    'Tomato___Late_blight',
+    'Tomato___Leaf_Mold',
+    'Tomato___Septoria_leaf_spot',
+    'Tomato___Spider_mites_Two_spotted_spider_mite'
+]
+
+def clean_class_name(raw_name):
+    parts = raw_name.split('___')
+    if len(parts) == 2:
+        crop, disease = parts
+        disease = disease.replace('_', ' ')
+        return f"{crop} - {disease}"
+    return raw_name.replace('_', ' ')
+
+DISEASE_INFO = {
+    "Pepper__bell - Bacterial spot": {
+        "info": "Caused by Xanthomonas campestris, this disease leads to small, dark spots on leaves and fruits.",
+        "solution": "Use copper-based bactericides, avoid overhead irrigation, and ensure good crop rotation."
+    },
+    "Pepper__bell - healthy": {
+        "info": "No disease detected. The plant appears healthy and disease-free.",
+        "solution": "Continue regular monitoring and follow good agricultural practices."
+    },
+    "Potato - Early blight": {
+        "info": "Caused by Alternaria solani, appears as concentric brown spots on older leaves.",
+        "solution": "Apply fungicides and practice crop rotation to reduce recurrence."
+    },
+    "Potato - healthy": {
+        "info": "The potato plant is healthy and shows no signs of disease.",
+        "solution": "Ensure consistent irrigation and nutrient management for continued health."
+    },
+    "Potato - Late blight": {
+        "info": "Caused by Phytophthora infestans, this disease leads to dark lesions on leaves and tubers.",
+        "solution": "Use preventive fungicides like mancozeb and ensure proper drainage and spacing."
+    },
+    "Tomato - Target Spot": {
+        "info": "Target spot is caused by Corynespora cassiicola and forms bullseye-like lesions on tomato leaves.",
+        "solution": "Remove infected foliage and apply fungicides like chlorothalonil or azoxystrobin."
+    },
+    "Tomato - Tomato mosaic virus": {
+        "info": "A viral infection causing mottling, leaf distortion, and stunted growth in tomatoes.",
+        "solution": "Remove infected plants, sterilize tools, and avoid tobacco contact while handling crops."
+    },
+    "Tomato - Tomato YellowLeaf Curl Virus": {
+        "info": "Transmitted by whiteflies, this virus causes yellowing and upward curling of leaves.",
+        "solution": "Use resistant varieties, control whiteflies with insecticides, and remove infected plants."
+    },
+    "Tomato - Bacterial spot": {
+        "info": "Bacterial spot is caused by Xanthomonas bacteria and affects leaves and fruits.",
+        "solution": "Avoid overhead watering, remove infected parts, and apply copper-based sprays."
+    },
+    "Tomato - Early blight": {
+        "info": "Fungal disease caused by Alternaria species, appears as brown spots with concentric rings.",
+        "solution": "Apply fungicides, use crop rotation, and remove infected leaves promptly."
+    },
+    "Tomato - healthy": {
+        "info": "No visible signs of disease. The tomato plant is healthy.",
+        "solution": "Maintain healthy soil, irrigate properly, and keep monitoring for pests and diseases."
+    },
+    "Tomato - Late blight": {
+        "info": "Caused by Phytophthora infestans, thrives in wet, humid conditions.",
+        "solution": "Use fungicides like chlorothalonil, remove infected leaves, and ensure good air flow."
+    },
+    "Tomato - Leaf Mold": {
+        "info": "Leaf mold is caused by Fulvia fulva fungus, leading to yellow spots and velvety growth on leaves.",
+        "solution": "Provide good ventilation, reduce humidity, and use fungicides like mancozeb or copper-based sprays."
+    },
+    "Tomato - Septoria leaf spot": {
+        "info": "Caused by Septoria lycopersici fungus, forms small circular spots on lower leaves.",
+        "solution": "Remove infected leaves, avoid wetting foliage, and use protective fungicides."
+    },
+    "Tomato - Spider mites Two spotted spider mite": {
+        "info": "Spider mites suck sap from leaves, causing speckled yellowing and webbing.",
+        "solution": "Spray miticides or neem oil, increase humidity, and wash off mites with water jets."
+    }
+}
+
+def get_related_links(query, num_results=3):
+    results = []
+    try:
+        # Search for URLs using the googlesearch package
+        urls = list(search(query + " crop disease treatment site:.in", num_results=num_results))
+    except Exception:
+        return results
+
+    # Process each URL to extract title and image URL
+    for url in urls:
+        try:
+            response = requests.get(url, timeout=5)
+            if response.status_code != 200:
+                continue
+
+            soup = BeautifulSoup(response.text, "html.parser")
+
+            # Try to get Open Graph title, fallback to <title>
+            title_tag = soup.find("meta", property="og:title")
+            if title_tag and title_tag.get("content"):
+                title = title_tag.get("content")
+            else:
+                title = soup.title.string.strip() if soup.title and soup.title.string else url
+
+            # Try to get Open Graph image, fallback to a placeholder
+            image_tag = soup.find("meta", property="og:image")
+            if image_tag and image_tag.get("content"):
+                image = image_tag.get("content")
+            else:
+                image = "https://via.placeholder.com/300x150.png?text=No+Preview"
+
+            results.append({
+                "url": url,
+                "title": title,
+                "image": image
+            })
+        except Exception:
+            # Skip URLs that cause any issues
+            continue
+
+    return results
+
+def predict_disease(request):
+    prediction = None
+    image_url = None
+    details = {}
+    related_links = []
+
+    if request.method == 'POST' and 'image' in request.FILES:
+        img_file = request.FILES['image']
+        fs = FileSystemStorage()
+        file_path = fs.save(img_file.name, img_file)
+        image_url = fs.url(file_path)
+
+        # Preprocess image
+        img_path = os.path.join(fs.location, file_path)
+        img = image.load_img(img_path, target_size=(128, 128))
+        img_array = image.img_to_array(img) / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
+
+        # Prediction
+        prediction_idx = np.argmax(model.predict(img_array), axis=1)[0]
+        raw_prediction = CLASS_NAMES[prediction_idx]
+        prediction = clean_class_name(raw_prediction)
+
+        # Info & search
+        details = DISEASE_INFO.get(prediction, {
+            "info": "No detailed info available.",
+            "solution": "Please consult an agricultural expert or Krishi Kendra."
+        })
+
+        related_links = get_related_links(prediction)
+
+    return render(request, 'disease.html', {
+        'prediction': prediction,
+        'image_url': image_url,
+        'details': details,
+        'related_links': related_links
     })

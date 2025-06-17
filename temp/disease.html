@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crop Disease Prediction</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card-img-top {
+      height: 150px;
+      object-fit: cover;
+    }
+    .image-preview img {
+      max-height: 250px;
+      width: auto;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<div class="container py-5">
+  <h2 class="text-center mb-4">
+    🌾 Crop Disease Prediction System
+  </h2>
+
+  {% if not prediction %}
+  <!-- Centered Upload Form Before Prediction -->
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body text-center">
+          <h4 class="card-title">Upload Leaf Image</h4>
+          <p class="text-muted">Upload a leaf image to predict the crop disease and get suggestions.</p>
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="image" accept="image/*" class="form-control my-3" required>
+            <input type="submit" value="Predict" class="btn btn-success w-100">
+          </form>
+          {% if image_url %}
+          <div class="image-preview mt-3">
+            <h6 class="text-muted">Uploaded Image:</h6>
+            <img src="{{ image_url }}" alt="Uploaded Image">
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <!-- Two Column Layout After Prediction -->
+  <div class="row g-4">
+    <!-- Upload Column -->
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body text-center">
+          <h4 class="card-title">Upload New Image</h4>
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="image" accept="image/*" class="form-control my-3" required>
+            <input type="submit" value="Predict" class="btn btn-success w-100">
+          </form>
+          {% if image_url %}
+          <div class="image-preview mt-3">
+            <h6 class="text-muted">Uploaded Image:</h6>
+            <img src="{{ image_url }}" alt="Uploaded Image">
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Prediction Result -->
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h4 class="card-title text-success text-center">🌿 Prediction Result</h4>
+          <hr>
+          <h5 class="text-center fw-bold text-dark">{{ prediction }}</h5>
+          <hr>
+          <h6 class="fw-bold">About the Disease:</h6>
+          <p>{{ details.info }}</p>
+          <h6 class="fw-bold">Recommended Solution:</h6>
+          <p>{{ details.solution }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Links -->
+  {% if related_links %}
+  <div class="mt-5">
+    <h4 class="mb-3">📰 Related Information</h4>
+    <div class="row g-4">
+      {% for link in related_links %}
+      <div class="col-md-4">
+        <div class="card h-100">
+          <img src="{{ link.image }}" class="card-img-top" alt="Link Image">
+          <div class="card-body">
+            <h6 class="card-title">{{ link.title }}</h6>
+            <a href="{{ link.url }}" target="_blank" class="btn btn-outline-primary btn-sm">Read More</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  {% endif %}
+</div>
+</body>
+</html>
